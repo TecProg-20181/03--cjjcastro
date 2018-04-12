@@ -1,6 +1,7 @@
 import random
 import string
 
+
 WORDLIST_FILENAME = "words.txt"
 
 
@@ -43,7 +44,6 @@ class Word:
         return guessed
 
     def getAvailableLetters(self):
-        import string
         # 'abcdefghijklmnopqrstuvwxyz'
         available = string.ascii_lowercase
         for letter in available:
