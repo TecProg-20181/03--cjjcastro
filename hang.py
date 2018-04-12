@@ -54,6 +54,7 @@ class Word:
     def differentLetters(self):
         return len(set(self.word))
 
+
 def hangman(words):
     
     guesses = 8
@@ -70,7 +71,6 @@ def hangman(words):
             words.loadWords()
         else:
             break
-
 
     while  words.isWordGuessed() == False and guesses > 0:
         print 'You have ', guesses, 'guesses left.'
@@ -97,7 +97,6 @@ def hangman(words):
             print 'Congratulations, you won!'
         else:
             print 'Sorry, you ran out of guesses. The word was ', words.word, '.'
-
 
 
 if __name__ == "__main__":
