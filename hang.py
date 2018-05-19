@@ -1,8 +1,10 @@
+import os
 import random
 import string
 
 
 WORDLIST_FILENAME = "words.txt"
+MAX_GUESSES = 8
 
 
 class Word:
@@ -18,7 +20,11 @@ class Word:
         """
         print "Loading word list from file..."
         # inFile: file
-        inFile = open(WORDLIST_FILENAME, 'r', 0)
+        try:
+            inFile = open(WORDLIST_FILENAME, 'r', 0)
+        except IOError:
+            print '{} cannot open'.format(WORDLIST_FILENAME)
+            exit()
         # line: string
         line = inFile.readline()
         # wordlist: list of strings
@@ -50,27 +56,30 @@ class Word:
             if letter in self.lettersGuessed:
                 available = available.replace(letter, '')
         return available
-    
+
     def differentLetters(self):
         return len(set(self.word))
 
 
 def hangman(words):
-    
-    guesses = 8
+
+    guesses = MAX_GUESSES
+
     print 'Welcome to the game, Hangam!'
     print 'I am thinking of a word that is', len(words.word), ' letters long.'
     print 'Has', words.differentLetters(), 'different letters'
     print '-------------'
-    
+
     while words.differentLetters() > guesses:
         print 'The number of different letters is greater than the number of attempts'
         print 'Do you want one new word?\ny- yes\nn- no'
         input = raw_input()
         if input == 'y':
             words.loadWords()
-        else:
+        elif input == n:
             break
+        else:
+            print 'Invalid option'
 
     while  words.isWordGuessed() == False and guesses > 0:
         print 'You have ', guesses, 'guesses left.'
@@ -78,7 +87,9 @@ def hangman(words):
         print 'Available letters', available
         letter = raw_input('Please guess a letter: ')
 
-        if letter in words.lettersGuessed:
+        if len(letter) != 1 or letter.isalpha() == False:
+            print 'Oops! "{}" is not a letter! Please guess a new letter.'.format(letter)
+        elif letter in words.lettersGuessed:
             guessed = words.getGuessedWord()
             print 'Oops! You have already guessed that letter: ', guessed
         elif letter in words.word:
@@ -89,9 +100,11 @@ def hangman(words):
             guesses -= 1
             words.lettersGuessed.append(letter)
             guessed = words.getGuessedWord()
-            print 'Oops! That letter is not in my word: ', guessed            
+            print 'Oops! That letter is not in my word: ', guessed
         print '------------'
 
+        letter = raw_input()
+        os.system('cls' if os.name == 'nt' else 'clear')
     else:
         if words.isWordGuessed():
             print 'Congratulations, you won!'
